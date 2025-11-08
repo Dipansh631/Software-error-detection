@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Software Defects Detection System{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center min-vh-100 py-5">
+            <div class="col-lg-6">
+                <div class="hero-content fade-in">
+                    <h1 class="display-4 fw-bold text-primary mb-4">
+                        <i class="fas fa-shield-alt me-3"></i>
+                        Software Defects Detection
+                    </h1>
+                    <p class="lead text-muted mb-4">
+                        An In-Depth Analysis of Machine Learning Methods and Static Analysis Tools 
+                        for Greater Accuracy
+                    </p>
+                    <p class="text-muted">
+                        Upload your source code and get instant predictions using advanced ML models 
+                        and static analysis techniques.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-image text-center">
+                    <i class="fas fa-code-branch hero-icon"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Upload Section -->
+<section id="upload" class="upload-section py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0 upload-card slide-up">
+                    <div class="card-header bg-primary-gradient text-white text-center py-4">
+                        <h2 class="mb-0">
+                            <i class="fas fa-file-code me-2"></i>
+                            Analyze Your Code
+                        </h2>
+                        <p class="mb-0 mt-2 opacity-75">Upload a source code file for defect detection</p>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="POST" enctype="multipart/form-data" id="uploadForm">
+                            <div class="mb-4">
+                                <label for="codefile" class="form-label fw-semibold">
+                                    <i class="fas fa-file-alt me-2"></i>Source Code File
+                                </label>
+                                <input 
+                                    type="file" 
+                                    class="form-control form-control-lg" 
+                                    id="codefile" 
+                                    name="codefile" 
+                                    accept=".py,.txt,.java,.js,.cpp,.c,.cs,.rb,.go,.ts" 
+                                    required
+                                >
+                                <div class="form-text">
+                                    Supported formats: .py, .java, .js, .cpp, .c, .cs, .rb, .go, .ts
+                                </div>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary-gradient btn-lg btn-hover-glow">
+                                    <i class="fas fa-search me-2"></i>
+                                    Analyze Code
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Results Section -->
+{% if result %}
+<section class="results-section py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <!-- Prediction Result Card -->
+                <div class="card shadow-lg border-0 mb-4 result-card fade-in">
+                    <div class="card-header {% if result.is_defective %}bg-danger-gradient{% else %}bg-success-gradient{% endif %} text-white py-4">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <h3 class="mb-1">
+                                    <i class="fas fa-{% if result.is_defective %}exclamation-triangle{% else %}check-circle{% endif %} me-2"></i>
+                                    Prediction Result
+                                </h3>
+                                <p class="mb-0 opacity-75">Model Analysis Complete</p>
+                            </div>
+                            <div class="prediction-badge">
+                                {% if result.is_defective %}
+                                    <span class="badge bg-light text-danger fs-6 px-3 py-2">
+                                        <i class="fas fa-times-circle me-1"></i>Defective
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-light text-success fs-6 px-3 py-2">
+                                        <i class="fas fa-check-circle me-1"></i>Clean
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="info-item">
+                                    <span class="label">
+                                        <i class="fas fa-robot me-2 text-primary"></i>Model Used:
+                                    </span>
+                                    <span class="value">{{ result.model_name }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="info-item">
+                                    <span class="label">
+                                        <i class="fas fa-chart-line me-2 text-primary"></i>Status:
+                                    </span>
+                                    <span class="value">
+                                        {% if result.is_defective %}
+                                            <span class="text-danger fw-bold">Defective Code Detected</span>
+                                        {% else %}
+                                            <span class="text-success fw-bold">Code is Clean</span>
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Metrics Card -->
+                <div class="card shadow-lg border-0 metrics-card fade-in">
+                    <div class="card-header bg-info-gradient text-white py-3">
+                        <h4 class="mb-0">
+                            <i class="fas fa-chart-bar me-2"></i>
+                            Static Analysis Metrics
+                        </h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="metrics-display">
+                            <pre class="metrics-json">{{ result.metrics_json }}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- About Section -->
+<section id="about" class="about-section py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="display-5 fw-bold text-primary mb-4">
+                    <i class="fas fa-info-circle me-2"></i>About This System
+                </h2>
+                <p class="lead text-muted mb-4">
+                    This system uses advanced Machine Learning algorithms and static analysis techniques 
+                    to detect potential defects in source code.
+                </p>
+                <div class="row mt-5">
+                    <div class="col-md-4 mb-4">
+                        <div class="feature-box">
+                            <i class="fas fa-brain fa-3x text-primary mb-3"></i>
+                            <h5>ML Models</h5>
+                            <p class="text-muted">8 different ML algorithms for comprehensive analysis</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="feature-box">
+                            <i class="fas fa-code fa-3x text-primary mb-3"></i>
+                            <h5>Static Analysis</h5>
+                            <p class="text-muted">Advanced code metrics and complexity analysis</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="feature-box">
+                            <i class="fas fa-chart-pie fa-3x text-primary mb-3"></i>
+                            <h5>Accurate Results</h5>
+                            <p class="text-muted">High precision predictions with detailed metrics</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
