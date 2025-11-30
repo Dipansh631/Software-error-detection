@@ -39,7 +39,7 @@ def load_dataset(csv_path: str) -> pd.DataFrame:
         raise FileNotFoundError(f"Dataset file not found: {csv_path}")
     
     try:
-        df = pd.read_csv(csv_path)
+    df = pd.read_csv(csv_path)
     except Exception as e:
         raise ValueError(f"Error reading CSV file {csv_path}: {str(e)}")
     
@@ -80,7 +80,7 @@ def train_model(df: pd.DataFrame) -> Tuple[RandomForestClassifier, float, str]:
     
     X = df[FEATURE_COLUMNS].copy()
     y = df["label"].astype(int)
-    
+
     # Check for valid label values
     unique_labels = y.unique()
     if len(unique_labels) < 2:
@@ -106,10 +106,10 @@ def train_model(df: pd.DataFrame) -> Tuple[RandomForestClassifier, float, str]:
     except ValueError as e:
         # If stratify fails, try without it
         print(f"Warning: Stratified split failed: {e}. Using non-stratified split.")
-        X_train, X_test, y_train, y_test = train_test_split(
+    X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=0.25, random_state=42, stratify=None
-        )
-    
+    )
+
     if len(X_train) < 5:
         raise ValueError(f"Training set too small: {len(X_train)} samples")
     
@@ -133,7 +133,7 @@ def main() -> None:
     model_path = os.path.join(model_dir, "defect_model.pkl")
 
     try:
-        os.makedirs(model_dir, exist_ok=True)
+    os.makedirs(model_dir, exist_ok=True)
     except Exception as e:
         print(f"Error creating model directory: {e}")
         sys.exit(1)
@@ -144,9 +144,9 @@ def main() -> None:
     
     try:
         promise_df = load_promise_datasets(datasets_dir)
-        if promise_df is not None and len(promise_df) > 0:
-            df = promise_df
-            print(f"Loaded PROMISE datasets: {len(df)} rows")
+    if promise_df is not None and len(promise_df) > 0:
+        df = promise_df
+        print(f"Loaded PROMISE datasets: {len(df)} rows")
     except Exception as e:
         print(f"Warning: Error loading PROMISE datasets: {e}")
         print("Falling back to sample dataset...")
@@ -160,7 +160,7 @@ def main() -> None:
         
         try:
             print("Loading sample dataset...")
-            df = load_dataset(data_path)
+        df = load_dataset(data_path)
             print(f"Loaded sample dataset: {len(df)} rows")
         except Exception as e:
             print(f"Error loading sample dataset: {e}")
@@ -168,15 +168,15 @@ def main() -> None:
     
     # Train the model
     try:
-        model, acc, report = train_model(df)
+    model, acc, report = train_model(df)
     except Exception as e:
         print(f"Error training model: {e}")
         sys.exit(1)
-    
+
     # Save the model
     try:
-        with open(model_path, "wb") as f:
-            pickle.dump(model, f)
+    with open(model_path, "wb") as f:
+        pickle.dump(model, f)
         print(f"\n{'='*60}")
         print("SUCCESS: Model trained and saved!")
         print(f"{'='*60}")

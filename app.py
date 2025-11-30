@@ -61,7 +61,7 @@ def index():
 
 
 if __name__ == '__main__':
-    # Run the Flask development server
+    # Run the Flask development server (local only)
     port = int(os.environ.get('PORT', 5000))
     print("\n" + "="*60)
     print("Starting Flask Server...")
@@ -69,5 +69,9 @@ if __name__ == '__main__':
     print(f"\nServer running at: http://127.0.0.1:{port}")
     print(f"Press Ctrl+C to stop the server\n")
     app.run(host='127.0.0.1', port=port, debug=True)
+else:
+    # Production mode - gunicorn will handle this
+    # Ensure app is configured for production
+    app.config['DEBUG'] = False
 
 
